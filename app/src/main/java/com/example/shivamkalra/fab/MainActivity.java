@@ -11,6 +11,8 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
+
+    FloatingActionButton fab,fabsmall;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,7 +20,9 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fabsmall=(FloatingActionButton) findViewById(R.id.fabsmall);
+        
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
