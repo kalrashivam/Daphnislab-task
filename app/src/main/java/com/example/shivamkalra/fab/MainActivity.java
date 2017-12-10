@@ -1,5 +1,6 @@
 package com.example.shivamkalra.fab;
 
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -17,7 +18,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -73,27 +77,52 @@ public class MainActivity extends AppCompatActivity {
                 //             .setAction("Action", null).show();
 
                 if (is_open) {
-                    fab.startAnimation(rotate_anti);
+                    switch(image_count){
+                        case 1:fabsmall1.startAnimation(fab_close);
+                            fabsmall1.setClickable(false);
+                            break;
+                        case 2:fabsmall1.startAnimation(fab_close);
+                            fabsmall2.startAnimation(fab_close);
+                            fabsmall1.setClickable(false);
+                            fabsmall2.setClickable(false);
+                            break;
+                        case 3:
+                              fabsmall1.startAnimation(fab_close);
+                              fabsmall2.startAnimation(fab_close);
+                              fabsmall3.startAnimation(fab_close);
+                              fabsmall1.setClickable(false);
+                              fabsmall2.setClickable(false);
+                              fabsmall3.setClickable(false);
+                              break;
+                    }
                     fabsmall.startAnimation(fab_close);
-                    fabsmall1.startAnimation(fab_close);
-                    fabsmall2.startAnimation(fab_close);
-                    fabsmall3.startAnimation(fab_close);
-                    fabsmall1.setClickable(false);
-                    fabsmall2.setClickable(false);
-                    fabsmall3.setClickable(false);
+                    fab.startAnimation(rotate_anti);
+
                     fabsmall.setClickable(false);
 
                     is_open = false;
 
                 } else {
+                    switch(image_count){
+                        case 1:fabsmall1.startAnimation(fab_open);
+                               fabsmall1.setClickable(true);
+                               break;
+                        case 2:fabsmall1.startAnimation(fab_open);
+                               fabsmall1.setClickable(true);
+                               fabsmall2.startAnimation(fab_open);
+                               fabsmall2.setClickable(true);
+                               break;
+                        case 3:fabsmall1.startAnimation(fab_open);
+                               fabsmall1.setClickable(true);
+                               fabsmall2.startAnimation(fab_open);
+                               fabsmall2.setClickable(true);
+                               fabsmall3.startAnimation(fab_open);
+                               fabsmall3.setClickable(true);
+                               break;
+
+                    }
                     fab.startAnimation(rotate_clock);
                     fabsmall.startAnimation(fab_open);
-                    fabsmall1.startAnimation(fab_open);
-                    fabsmall2.startAnimation(fab_open);
-                    fabsmall3.startAnimation(fab_open);
-                    fabsmall1.setClickable(true);
-                    fabsmall2.setClickable(true);
-                    fabsmall3.setClickable(true);
                     fabsmall.setClickable(true);
                     is_open = true;
 
@@ -138,16 +167,29 @@ public class MainActivity extends AppCompatActivity {
                image = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                // Log.d(TAG, String.valueOf(bitmap));
                //got image from gallery
-               
+               ContextWrapper wrapper = new ContextWrapper(getApplicationContext());
+               File file = wrapper.getDir("Myapp",MODE_PRIVATE);
+               file = new File(file, image_count+".jpg");
+               OutputStream stream = null;
+               stream = new FileOutputStream(file);
+               image.compress(Bitmap.CompressFormat.JPEG,100,stream);
+               stream.flush();
+               stream.close();
+
 
            }catch(IOException e){
-               Log.e("Io exception caught", "Check image"+ e);
+               Log.e("Io exception caught", "Check image");
+               e.printStackTrace();
            }
 
 
         }
 
-        image_count++;
+        if(image_count<3){
+            image_count++;
+        }else{
+            image_count=3;
+        }
     }
 
 }

@@ -23,7 +23,7 @@
     <include layout="@layout/content_main" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabsmall3"
+        android:id="@+id/fabsmall1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
@@ -47,7 +47,7 @@
         android:visibility="invisible"/>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabsmall1"
+        android:id="@+id/fabsmall2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
@@ -58,7 +58,7 @@
         android:visibility="invisible"/>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabsmall2"
+        android:id="@+id/fabsmall3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
