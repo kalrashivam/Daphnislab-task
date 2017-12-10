@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton fab, fabsmall, fabsmall1, fabsmall2, fabsmall3;
     Animation fab_close, fab_open, rotate_clock, rotate_anti;
     boolean is_open = false;
-    int image_count = 0;
+    private static int image_count = 0;
     Button but;
     Bitmap image;
     Intent intent;
@@ -78,14 +78,15 @@ public class MainActivity extends AppCompatActivity {
 
                 if (is_open) {
                     switch(image_count){
+                        case 0: break;
                         case 1:fabsmall1.startAnimation(fab_close);
-                            fabsmall1.setClickable(false);
-                            break;
+                               fabsmall1.setClickable(false);
+                               break;
                         case 2:fabsmall1.startAnimation(fab_close);
-                            fabsmall2.startAnimation(fab_close);
-                            fabsmall1.setClickable(false);
-                            fabsmall2.setClickable(false);
-                            break;
+                               fabsmall2.startAnimation(fab_close);
+                               fabsmall1.setClickable(false);
+                               fabsmall2.setClickable(false);
+                               break;
                         case 3:
                               fabsmall1.startAnimation(fab_close);
                               fabsmall2.startAnimation(fab_close);
@@ -104,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
                 } else {
                     switch(image_count){
+                        case 0: break;
                         case 1:fabsmall1.startAnimation(fab_open);
                                fabsmall1.setClickable(true);
                                break;
@@ -148,6 +150,11 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            image_count=0;
+            File dir = getFilesDir();
+            File file = new File(dir, "Myapp");
+            boolean deleted = file.delete();
+
             return true;
         }
 
@@ -185,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        if(image_count<3){
+        if(image_count<=3){
             image_count++;
         }else{
             image_count=3;
