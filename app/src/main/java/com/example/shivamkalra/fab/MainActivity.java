@@ -1,22 +1,36 @@
 package com.example.shivamkalra.fab;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
+
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
 
-    FloatingActionButton fab,fabsmall,fabsmall1,fabsmall2,fabsmall3;
-    Animation fab_close,fab_open,rotate_clock,rotate_anti;
-    boolean is_open=false;
+    FloatingActionButton fab, fabsmall, fabsmall1, fabsmall2, fabsmall3;
+    Animation fab_close, fab_open, rotate_clock, rotate_anti;
+    boolean is_open = false;
+    int image_count = 0;
+    Button but;
+    Bitmap image;
+    Intent intent;
+    private int PICK_IMAGE_REQUEST = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,27 +39,40 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        fabsmall=(FloatingActionButton) findViewById(R.id.fabsmall);
+        fabsmall = (FloatingActionButton) findViewById(R.id.fabsmall);
+        // This is for adding image to a folder
 
-        fabsmall1=(FloatingActionButton) findViewById(R.id.fabsmall1);
+        fabsmall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
 
-        fabsmall2=(FloatingActionButton) findViewById(R.id.fabsmall2);
 
-        fabsmall3=(FloatingActionButton) findViewById(R.id.fabsmall3);
+            }
+        });
+
+        fabsmall1 = (FloatingActionButton) findViewById(R.id.fabsmall1);
+
+        fabsmall2 = (FloatingActionButton) findViewById(R.id.fabsmall2);
+
+        fabsmall3 = (FloatingActionButton) findViewById(R.id.fabsmall3);
 
 
-        fab_close= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_close);
-        fab_open=AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_open);
-        rotate_anti=AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_mainfab_anti);
-        rotate_clock=AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_mainfab);
+        fab_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
+        fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
+        rotate_anti = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_mainfab_anti);
+        rotate_clock = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_mainfab);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-           //     Snackbar.make(view, "One button is shown always for adding", Snackbar.LENGTH_LONG)
-           //             .setAction("Action", null).show();
+                //     Snackbar.make(view, "One button is shown always for adding", Snackbar.LENGTH_LONG)
+                //             .setAction("Action", null).show();
 
-                if(is_open){
+                if (is_open) {
                     fab.startAnimation(rotate_anti);
                     fabsmall.startAnimation(fab_close);
                     fabsmall1.startAnimation(fab_close);
@@ -56,9 +83,9 @@ public class MainActivity extends AppCompatActivity {
                     fabsmall3.setClickable(false);
                     fabsmall.setClickable(false);
 
-                    is_open=false;
+                    is_open = false;
 
-                }else{
+                } else {
                     fab.startAnimation(rotate_clock);
                     fabsmall.startAnimation(fab_open);
                     fabsmall1.startAnimation(fab_open);
@@ -68,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                     fabsmall2.setClickable(true);
                     fabsmall3.setClickable(true);
                     fabsmall.setClickable(true);
-                    is_open=true;
+                    is_open = true;
 
 
                 }
@@ -97,4 +124,30 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+
+            Uri uri = data.getData();
+
+           try {
+               image = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+               // Log.d(TAG, String.valueOf(bitmap));
+               //got image from gallery
+               
+
+           }catch(IOException e){
+               Log.e("Io exception caught", "Check image"+ e);
+           }
+
+
+        }
+
+        image_count++;
+    }
+
 }
